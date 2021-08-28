@@ -13,5 +13,9 @@ router.get("/", function (req, res, next) {
   });
 });
 
+router.post("/", function (req, res, next) {
+  res.json(req.body);
+});
+
 // global 전역으로 router 사용할 수 있도록
 module.exports = router;
