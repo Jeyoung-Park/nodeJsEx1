@@ -2,19 +2,20 @@ var express = require("express");
 var router = express.Router();
 var mysql = require("mysql");
 var global = require("../global/variable.js");
+var mysql_odbc=require('../db/db_conn');
+
 
 router.get("/", function (req, res, next) {
-  console.log("mysql.js 호출");
   // 데이터 베이스 접속 정보 입력
-  var connection = mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    // password: "asajason1229",
-    password: global.getDBPassword(),
-    database: "nodedb",
-  });
-
+  // var connection = mysql.createConnection({
+  //   host: "localhost",
+  //   port: 3306,
+  //   user: "root",
+  //   // password: "asajason1229",
+  //   password: global.getDBPassword(),
+  //   database: "nodedb",
+  // });
+  var connection=mysql_odbc.init();
   // connect 함수를 이용해 해당 db에 접속 시도
   // 접속 오류 발생 시 err
   connection.connect(function (err) {
