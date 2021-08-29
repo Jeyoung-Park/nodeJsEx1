@@ -22,4 +22,22 @@ router.get("/list/:page", function (req, res, next) {
   });
 });
 
+router.get("/write", function (req, res, next) {
+  res.render("write", { title: "게시판 글쓰기" });
+});
+
+router.post("/write", function (req, res, next) {
+  let { name, title, content, passwd } = req.body;
+  let datas = [name, title, content, passwd];
+
+  let sql = `insert into board(name, title, content, regdate, modidate, passwd, hit) values(?, ?, ?, now(), now(), ?, 0)`;
+
+  conn.query(sql, datas, function (err, row) {
+    if (err) {
+      console.error("err", err);
+    }
+    res.redirect("/board/list");
+  });
+});
+
 module.exports = router;
