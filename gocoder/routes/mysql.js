@@ -15,7 +15,8 @@ router.get("/", function (req, res, next) {
   //   password: global.getDBPassword(),
   //   database: "nodedb",
   // });
-  var connection=mysql_odbc.init();
+  // console.log('mysql_odbc, ', mysql_odbc());
+  var connection=mysql_odbc().init();
   // connect 함수를 이용해 해당 db에 접속 시도
   // 접속 오류 발생 시 err
   connection.connect(function (err) {
