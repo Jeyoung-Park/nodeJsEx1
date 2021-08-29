@@ -22,10 +22,12 @@ router.get("/list/:page", function (req, res, next) {
   });
 });
 
+// 게시물 작성 페이지 렌더링
 router.get("/write", function (req, res, next) {
   res.render("write", { title: "게시판 글쓰기" });
 });
 
+// 게시물 작성 api
 router.post("/write", function (req, res, next) {
   let { name, title, content, passwd } = req.body;
   let datas = [name, title, content, passwd];
@@ -37,6 +39,20 @@ router.post("/write", function (req, res, next) {
       console.error("err", err);
     }
     res.redirect("/board/list");
+  });
+});
+
+// 게시물 상세보기
+router.get("/read/:idx", function (req, res, next) {
+  var idx = req.params.idx;
+  // 마지막 idx에 매개변수를 받음
+  var sql = `select idx, name, title, content, date_format(modidate, '%Y-%m-%d %H:%i:%s') modidate, date_format(regdate, '%Y-m-%d %H:%i:%s') regdate, hit from board where idx=?`;
+
+  conn.query(sql, [idx], function (err, row) {
+    if (err) {
+      console.error(err);
+    }
+    res.render("read", { title: "글 상세", row: row[0] });
   });
 });
 
