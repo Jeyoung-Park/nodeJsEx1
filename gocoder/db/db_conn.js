@@ -1,15 +1,17 @@
 var mysql=require('mysql');
-var config=require('./db_info').local;
+var config=require('./db_info');
 
-modules.exports=function(){
+// console.log('config in db_conn', config);
+
+module.exports=function(){
     return{
         init:function(){
             return mysql.createConnection({
-                host:config.host,
-                port:config.port,
-                user:config.user,
-                password:config.password,
-                database:config.database,
+                host:config.getDBInfo().local.host,
+                port:config.getDBInfo().local.port,
+                user:config.getDBInfo().local.user,
+                password:config.getDBInfo().local.password,
+                database:config.getDBInfo().local.database,
             })
         }
     }
