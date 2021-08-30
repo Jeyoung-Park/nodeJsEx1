@@ -67,12 +67,34 @@ router.post("/update", function (req, res, next) {
       console.error(err);
     }
     console.log("result in /update", result);
+    // affectedRows: 해당 쿼리로 변경된 수에 행을 불러옴
+    // 0이면 업데이트 x => 비밀번호가 틀린 것
     if (result.affectedRows === 0) {
       res.send(
         '<script>alert("패스워드가 일치하지 않습니다."):history.back();</script>'
       );
     } else {
       res.redirect("/board/read/" + idx);
+    }
+  });
+});
+
+// 게시물 삭제
+router.post("/delete", function (req, res, next) {
+  let { idx, passwd } = req.body;
+  let datas = [idx, passwd];
+
+  let sql = "delete from board where idx=? and passwd=?";
+  conn.query(sql, datas, function (err, result) {
+    if (err) {
+      console.error(err);
+    }
+    if (result.affectedRows === 0) {
+      res.send(
+        '<script>alert("패스워드가 일치하지 않습니다.");history.back();</script>'
+      );
+    } else {
+      res.redirect("/board/list");
     }
   });
 });
