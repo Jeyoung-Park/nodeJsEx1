@@ -46,13 +46,34 @@ router.post("/write", function (req, res, next) {
 router.get("/read/:idx", function (req, res, next) {
   var idx = req.params.idx;
   // 마지막 idx에 매개변수를 받음
-  var sql = `select idx, name, title, content, date_format(modidate, '%Y-%m-%d %H:%i:%s') modidate, date_format(regdate, '%Y-m-%d %H:%i:%s') regdate, hit from board where idx=?`;
+  var sql = `select idx, name, title, content, date_format(modidate, '%Y-%m-%d %H:%i:%s') modidate, date_format(regdate, '%Y-%m-%d %H:%i:%s') regdate, hit from board where idx=?`;
 
   conn.query(sql, [idx], function (err, row) {
     if (err) {
       console.error(err);
     }
     res.render("read", { title: "글 상세", row: row[0] });
+  });
+});
+
+// 게시물 수정
+router.post("/update", function (req, res, next) {
+  let { idx, name, title, content, passwd } = req.body;
+  let datas = [idx, name, title, content, passwd];
+  let sql = `update board set name=?, title=?, content=?, modidate=now() where idx=? and passwd=?`;
+
+  conn.query(sql, datas, function (err, result) {
+    if (err) {
+      console.error(err);
+    }
+    console.log("result in /update", result);
+    if (result.affectedRows === 0) {
+      res.send(
+        '<script>alert("패스워드가 일치하지 않습니다."):history.back();</script>'
+      );
+    } else {
+      res.redirect("/board/read/" + idx);
+    }
   });
 });
 
